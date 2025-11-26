@@ -1,4 +1,9 @@
+'use client';
+
+import { useRouter } from "next/navigation";
+
 export default function ServicesPage() {
+  const router=useRouter()
   const services = [
     {
       title: "Manpower Staffing",
@@ -126,10 +131,10 @@ export default function ServicesPage() {
                 </ul>
 
                 {/* CTA Button */}
-                <a className={`w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r ${service.gradient} text-white hover:shadow-lg hover:scale-105 transition-all duration-300 group relative overflow-hidden`}>
+                <button className={`w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r ${service.gradient} text-white hover:shadow-lg hover:scale-105 transition-all duration-300 group relative overflow-hidden` }  onClick={()=>router.push('/get-services')}>
                   <span className="relative z-10">Get This Service</span>
                   <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                </a>
+                </button>
 
                 {/* Hover Effect */}
                 <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -177,10 +182,10 @@ export default function ServicesPage() {
           Let's discuss how our comprehensive services can drive your success story
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="px-8 py-4 rounded-2xl font-semibold bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:scale-105 transition-transform shadow-lg shadow-purple-500/25">
+          <button className="px-8 py-4 rounded-2xl font-semibold bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:scale-105 transition-transform shadow-lg shadow-purple-500/25"  onClick={()=>router.push('/get-services')}>
             Start Your Project
           </button>
-          <button className="px-8 py-4 rounded-2xl font-semibold border border-gray-700 text-gray-300 hover:border-purple-500 hover:text-purple-400 transition-colors">
+          <button className="px-8 py-4 rounded-2xl font-semibold border border-gray-700 text-gray-300 hover:border-purple-500 hover:text-purple-400 transition-colors"  onClick={()=>router.push('/contact')}>
             Schedule Consultation
           </button>
         </div>

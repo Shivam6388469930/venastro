@@ -1,4 +1,9 @@
+'use client'
+
+import { useRouter } from "next/navigation";
+
 export default function AboutPage() {
+  const router=useRouter();
   const values = [
     {
       title: "Innovation",
@@ -203,10 +208,10 @@ export default function AboutPage() {
           Let's discuss how we can help transform your business with our comprehensive solutions.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="px-8 py-4 rounded-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:scale-105 transition-transform shadow-lg shadow-purple-500/25">
+          <button className="px-8 py-4 rounded-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:scale-105 transition-transform shadow-lg shadow-purple-500/25"  onClick={()=>router.push('/get-services')}>
             Start Your Journey
           </button>
-          <button className="px-8 py-4 rounded-2xl font-semibold border border-gray-700 text-gray-300 hover:border-cyan-500 hover:text-cyan-400 transition-colors">
+          <button className="px-8 py-4 rounded-2xl font-semibold border border-gray-700 text-gray-300 hover:border-cyan-500 hover:text-cyan-400 transition-colors"  onClick={()=>router.push('/services')}>
             Learn More
           </button>
         </div>

@@ -1,4 +1,8 @@
+'use client'
+import { useRouter } from "next/navigation";
+
 export default function ContactPage() {
+  const router=useRouter()
   const contactMethods = [
     {
       icon: "📧",
@@ -240,12 +244,10 @@ export default function ContactPage() {
             Let's discuss how we can help you achieve your business goals with our comprehensive solutions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 rounded-2xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 text-white hover:scale-105 transition-transform shadow-lg shadow-purple-500/25">
+            <button className="px-8 py-4 rounded-2xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 text-white hover:scale-105 transition-transform shadow-lg shadow-purple-500/25"  onClick={()=>router.push('/contact')}>
               Schedule a Call
             </button>
-            <button className="px-8 py-4 rounded-2xl font-semibold border border-gray-700 text-gray-300 hover:border-pink-500 hover:text-pink-400 transition-colors">
-              Download Brochure
-            </button>
+           
           </div>
         </div>
       </div>

@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
+  const router=useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
@@ -39,7 +41,7 @@ export default function Navbar() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300"></span>
               </Link>
             ))}
-            <button className="px-6 py-2 rounded-full font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 transition-transform shadow-lg shadow-blue-500/25">
+            <button className="px-6 py-2 rounded-full font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 transition-transform shadow-lg shadow-blue-500/25"  onClick={()=>router.push('/services')}>
               Get Started
             </button>
           </div>
@@ -86,7 +88,7 @@ export default function Navbar() {
                 {item.name}
               </Link>
             ))}
-            <button className="w-full px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 transition-transform mt-4">
+            <button className="w-full px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 transition-transform mt-4"  onClick={()=>router.push('/services')}>
               Get Started
             </button>
           </div>

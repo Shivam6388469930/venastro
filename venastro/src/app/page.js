@@ -1,6 +1,10 @@
+'use client'
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router=useRouter()
   const services = [
     {
       title: "Manpower Staffing",
@@ -49,10 +53,10 @@ export default function Home() {
             Empowering Business Through People & Technology
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3 rounded-full font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 transition-transform shadow-lg shadow-blue-500/25">
+            <button className="px-8 py-3 rounded-full font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 transition-transform shadow-lg shadow-blue-500/25" onClick={()=>router.push('/get-services')}>
               Get Started
             </button>
-            <button className="px-8 py-3 rounded-full font-semibold border border-gray-600 text-gray-300 hover:border-purple-500 hover:text-purple-400 transition-colors">
+            <button className="px-8 py-3 rounded-full font-semibold border border-gray-600 text-gray-300 hover:border-purple-500 hover:text-purple-400 transition-colors"  onClick={()=>router.push('/services')}>
               Learn More
             </button>
           </div>
@@ -121,7 +125,7 @@ export default function Home() {
                 {s.title}
               </h3>
               <p className="text-gray-400 mt-4 leading-relaxed">{s.desc}</p>
-              <button className="mt-6 px-6 py-3 rounded-full font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 transition-transform shadow-lg shadow-blue-500/25">
+              <button className="mt-6 px-6 py-3 rounded-full font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 transition-transform shadow-lg shadow-blue-500/25"  onClick={()=>router.push('/get-services')}>
                 Get This Service
               </button>
             </div>
