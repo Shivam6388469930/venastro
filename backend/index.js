@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
-const emailRoute = require('./Routes/email.js');
+const emailRoute = require('./route/email.js');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 8080;
@@ -14,13 +14,13 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json());
+// app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use(morgan('dev'));
 
 // Routes
-app.use('/api/v1', emailRoute);
+app.use('/api/v1/email', emailRoute);
 
 // 🔥 CONNECT TO DATABASE
 mongoose.connect(process.env.MONGODB_URI)

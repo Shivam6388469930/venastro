@@ -635,11 +635,44 @@ export default function GetServicePage() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Thank you for your inquiry! We will contact you within 2 hours.");
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Form submitted:", formData);
+  //   alert("Thank you for your inquiry! We will contact you within 2 hours.");
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch(`http://localhost:8080/api/email/send`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (data.status === "success") {
+      alert("Thank you! Your inquiry has been submitted successfully.");
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        company: "",
+        message: "",
+        service: "",
+        budget: "",
+        timeline: "",
+      });
+    } else {
+      alert(data.message || "Something went wrong.");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Server error. Please try again later.");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans pt-16">
