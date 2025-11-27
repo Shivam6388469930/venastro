@@ -1,11 +1,11 @@
-const Apply = require("../models/applyModel");
-const JobPost = require("../models/jobPostModel");
+import Apply from "../models/applyModel.js"; // Note the .js extension
+import JobPost from "../models/jobPostModel.js"; // Note the .js extension
 
 // ======================
 // APPLY FOR JOB
 // ======================
 
-exports.applyJob = async (req, res) => {
+export const applyJob = async (req, res) => {
   try {
     const { jobId, fullName, email, phone, resume, coverLetter } = req.body;
 
@@ -33,7 +33,6 @@ exports.applyJob = async (req, res) => {
       message: "Application submitted successfully",
       data: application,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -46,7 +45,7 @@ exports.applyJob = async (req, res) => {
 // GET ALL APPLICATIONS
 // ======================
 
-exports.getAllApplications = async (req, res) => {
+export const getAllApplications = async (req, res) => {
   try {
     const apps = await Apply.find().populate("jobId");
 
@@ -55,7 +54,6 @@ exports.getAllApplications = async (req, res) => {
       count: apps.length,
       data: apps,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -68,7 +66,7 @@ exports.getAllApplications = async (req, res) => {
 // GET APPLICATIONS BY JOB ID
 // ======================
 
-exports.getApplicationsByJob = async (req, res) => {
+export const getApplicationsByJob = async (req, res) => {
   try {
     const { jobId } = req.params;
 
@@ -79,7 +77,6 @@ exports.getApplicationsByJob = async (req, res) => {
       count: apps.length,
       data: apps,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,

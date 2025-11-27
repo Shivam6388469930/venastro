@@ -1,7 +1,9 @@
-const transporter = require("../configs/mail");
-const Email = require("../models/mails");
+// const transporter = require("../configs/mail");
+// const Email = require("../models/mails");
+import transporter from "../configs/mail.js";
+import Email from "../models/mails.js";
 
-exports.sendEmail = async (req, res) => {
+export const sendEmail = async (req, res) => {
   try {
     const { name, email, phone, message, budget, service, timeline, company } = req.body;
 

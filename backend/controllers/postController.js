@@ -1,9 +1,7 @@
-// controllers/jobPostController.js
-
-const JobPost = require("../models/jobPostModel");
+import JobPost from "../models/jobPostModel.js"; // Note the .js extension and default import
 
 // CREATE JOB POST
-exports.createJob = async (req, res) => {
+export const createJob = async (req, res) => {
   try {
     const newJob = new JobPost(req.body);
     const savedJob = await newJob.save();
@@ -19,7 +17,7 @@ exports.createJob = async (req, res) => {
 };
 
 // GET ALL JOB POSTS
-exports.getJobs = async (req, res) => {
+export const getJobs = async (req, res) => {
   try {
     const jobs = await JobPost.find().sort({ createdAt: -1 });
 
@@ -34,7 +32,7 @@ exports.getJobs = async (req, res) => {
 };
 
 // GET SINGLE JOB POST
-exports.getJobById = async (req, res) => {
+export const getJobById = async (req, res) => {
   try {
     const job = await JobPost.findById(req.params.id);
 
