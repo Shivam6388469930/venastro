@@ -1,7 +1,8 @@
-import JobPost from "../models/jobPostModel.js"; // Note the .js extension and default import
+import JobPost from "../models/jobModel.js"; // Updated import name
+import { AppError } from "../middleware/errorMiddleware.js"; // Added missing import
 
 // CREATE JOB POST
-export const createJob = async (req, res) => {
+export const createJob = async (req, res, next) => {
   try {
     const newJob = new JobPost(req.body);
     const savedJob = await newJob.save();
@@ -12,12 +13,12 @@ export const createJob = async (req, res) => {
       data: savedJob,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-// GET ALL JOB POSTS
-export const getJobs = async (req, res) => {
+// GET ALL JOB POSTS (PAGINATED)
+export const getJobs = async (req, res, next) => {
   try {
     const { status, location, page = 1, limit = 10 } = req.query;
 
@@ -51,15 +52,15 @@ export const getJobs = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-// GET SINGLE JOB POST
-export const getJobById = async (req, res) => {
+// GET SINGLE JOB POST (Includes applicationCount via Virtual)
+export const getJobById = async (req, res, next) => {
   try {
     const job = await JobPost.findById(req.params.id)
-      .populate("applicationCount")
+      .populate("applicationCount") // Now works thanks to the Virtual in the model
       .lean();
 
     if (!job) {
@@ -72,11 +73,12 @@ export const getJobById = async (req, res) => {
       data: job,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const updateJob = async (req, res) => {
+// UPDATE JOB POST
+export const updateJob = async (req, res, next) => {
   try {
     const job = await JobPost.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -93,11 +95,12 @@ export const updateJob = async (req, res) => {
       data: job,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const deleteJob = async (req, res) => {
+// DELETE JOB POST
+export const deleteJob = async (req, res, next) => {
   try {
     const job = await JobPost.findByIdAndDelete(req.params.id);
 
@@ -111,6 +114,6 @@ export const deleteJob = async (req, res) => {
       data: { id: req.params.id },
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };

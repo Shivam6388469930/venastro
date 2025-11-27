@@ -55,8 +55,20 @@ const JobPostSchema = new mongoose.Schema(
       default: "active",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true }, // Ensure virtuals are included when converting to JSON
+    toObject: { virtuals: true }, // Ensure virtuals are included when converting to Object
+  }
 );
+
+// Virtual field to count applications for this job post
+JobPostSchema.virtual("applicationCount", {
+  ref: "Apply", // The model to use
+  localField: "_id", // Find documents where `localField` (JobPost's ID)
+  foreignField: "jobId", // Is equal to `foreignField` (Apply's jobId)
+  count: true, // Get a count of the results
+});
 
 JobPostSchema.index({ status: 1, createdAt: -1 });
 JobPostSchema.index({ companyName: 1 });

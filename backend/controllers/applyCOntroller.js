@@ -1,36 +1,29 @@
-import Apply from "../models/applyModel.js"; // Note the .js extension
-import JobPost from "../models/jobPostModel.js"; // Note the .js extension
+import Apply from "../models/applyModel.js";
+import JobPost from "../models/jobModel.js"; // Updated import name
+import { AppError } from "../middleware/errorMiddleware.js"; // Added missing import
 
 // ======================
 // APPLY FOR JOB
 // ======================
-
-export const applyJob = async (req, res) => {
+export const applyJob = async (req, res, next) => {
   try {
     const { jobId, fullName, email, phone, resume, coverLetter } = req.body;
 
     // Check job exists
     const job = await JobPost.findById(jobId);
     if (!job) {
-      return res.status(404).json({
-        success: false,
-        message: "Job not found",
-      });
+      return next(new AppError("Job not found", 404)); // Use AppError
     }
 
     if (job.status !== "active") {
-      return res.status(400).json({
-        success: false,
-        message: "This job is no longer accepting applications",
-      });
+      return next(
+        new AppError("This job is no longer accepting applications", 400)
+      ); // Use AppError
     }
 
     const existingApplication = await Apply.findOne({ jobId, email });
     if (existingApplication) {
-      return res.status(400).json({
-        success: false,
-        message: "You have already applied for this job",
-      });
+      return next(new AppError("You have already applied for this job", 400)); // Use AppError
     }
 
     // Save application
@@ -51,18 +44,14 @@ export const applyJob = async (req, res) => {
       data: application,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error); // Pass error to global handler
   }
 };
 
 // ======================
-// GET ALL APPLICATIONS
+// GET ALL APPLICATIONS (PAGINATED)
 // ======================
-
-export const getAllApplications = async (req, res) => {
+export const getAllApplications = async (req, res, next) => {
   try {
     const { status, page = 1, limit = 10 } = req.query;
 
@@ -95,25 +84,44 @@ export const getAllApplications = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
 // ======================
-// GET APPLICATIONS BY JOB ID
+// GET APPLICATIONS BY JOB ID (FIXED LOGIC)
 // ======================
+export const getApplicationsByJob = async (req, res, next) => {
+  try {
+    const { id: jobId } = req.params; // Correctly get jobId from URL
 
-export const getApplicationsByJob = async (req, res) => {
+    const apps = await Apply.find({ jobId }) // Find all applications matching the jobId
+      .populate("jobId", "title companyName location")
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      message: `Applications for job ${jobId} retrieved successfully`,
+      count: apps.length,
+      data: apps,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ======================
+// GET APPLICATION BY ID
+// ======================
+export const getApplicationById = async (req, res, next) => {
   try {
     const application = await Apply.findById(req.params.id)
       .populate("jobId")
       .lean();
 
     if (!application) {
-      return next(new AppError("Application not found", 404));
+      return next(new AppError("Application not found", 404)); // Use AppError
     }
 
     res.status(200).json({
@@ -122,45 +130,19 @@ export const getApplicationsByJob = async (req, res) => {
       data: application,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-export const getApplicationById = async (req, res) => {
-  try {
-    const application = await Apply.findById(req.params.id)
-      .populate("jobId")
-      .lean();
-
-    if (!application) {
-      return next(new AppError("Application not found", 404));
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Application retrieved successfully",
-      data: application,
-    });
-  } catch {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const deleteApplication = async (req, res) => {
+// ======================
+// DELETE APPLICATION
+// ======================
+export const deleteApplication = async (req, res, next) => {
   try {
     const application = await Apply.findByIdAndDelete(req.params.id);
 
     if (!application) {
-      return res.status(404).json({
-        success: false,
-        message: "Application not found",
-      });
+      return next(new AppError("Application not found", 404)); // Use AppError
     }
 
     res.status(200).json({
@@ -169,9 +151,6 @@ export const deleteApplication = async (req, res) => {
       data: { id: req.params.id },
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };

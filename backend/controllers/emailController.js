@@ -2,10 +2,12 @@
 // const Email = require("../models/mails");
 import transporter from "../configs/mail.js";
 import Email from "../models/mails.js";
+import { AppError } from "../middleware/errorMiddleware.js";
 
 export const sendEmail = async (req, res) => {
   try {
-    const { name, email, phone, message, budget, service, timeline, company } = req.body;
+    const { name, email, phone, message, budget, service, timeline, company } =
+      req.body;
 
     // Enhanced validation
     if (!name || !email || !message || !service) {
@@ -25,38 +27,38 @@ export const sendEmail = async (req, res) => {
     }
 
     // Save to database
-    const emailRecord = await Email.create({ 
-      name, 
-      email, 
-      phone, 
-      message, 
-      budget, 
-      service, 
+    const emailRecord = await Email.create({
+      name,
+      email,
+      phone,
+      message,
+      budget,
+      service,
       timeline,
       company,
       ipAddress: req.ip,
-      userAgent: req.get('User-Agent')
+      userAgent: req.get("User-Agent"),
     });
 
     // Get current date and time
     const now = new Date();
-    const formattedDate = now.toLocaleDateString('en-IN', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    const formattedDate = now.toLocaleDateString("en-IN", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
-    const formattedTime = now.toLocaleTimeString('en-IN', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+    const formattedTime = now.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
 
     // Enhanced email template
     const mailOptions = {
       from: {
         name: "Ven Astro Website",
-        address: process.env.EMAIL_USER
+        address: process.env.EMAIL_USER,
       },
       to: process.env.EMAIL_USER,
       subject: `🎯 New Lead: ${service} Inquiry from ${name}`,
@@ -227,7 +229,11 @@ export const sendEmail = async (req, res) => {
                     <div class="section">
                         <div class="section-title">
                             📋 Lead Information
-                            ${timeline === 'urgent' ? '<span class="priority-badge">URGENT</span>' : ''}
+                            ${
+                              timeline === "urgent"
+                                ? '<span class="priority-badge">URGENT</span>'
+                                : ""
+                            }
                         </div>
                         <div class="detail-row">
                             <span class="label">Name:</span>
@@ -235,7 +241,9 @@ export const sendEmail = async (req, res) => {
                         </div>
                         <div class="detail-row">
                             <span class="label">Company:</span>
-                            <span class="value">${company || 'Not provided'}</span>
+                            <span class="value">${
+                              company || "Not provided"
+                            }</span>
                         </div>
                         <div class="detail-row">
                             <span class="label">Email:</span>
@@ -244,7 +252,11 @@ export const sendEmail = async (req, res) => {
                         <div class="detail-row">
                             <span class="label">Phone:</span>
                             <span class="value">
-                                ${phone ? `<a href="tel:${phone}" style="color: #667eea; text-decoration: none;">${phone}</a>` : 'Not provided'}
+                                ${
+                                  phone
+                                    ? `<a href="tel:${phone}" style="color: #667eea; text-decoration: none;">${phone}</a>`
+                                    : "Not provided"
+                                }
                             </span>
                         </div>
                     </div>
@@ -257,26 +269,42 @@ export const sendEmail = async (req, res) => {
                         </div>
                         <div class="detail-row">
                             <span class="label">Budget:</span>
-                            <span class="value">${budget ? budget.replace(/_/g, ' - ').replace(/k/g,',000').replace(/L/,'00,000') : 'Not specified'}</span>
+                            <span class="value">${
+                              budget
+                                ? budget
+                                    .replace(/_/g, " - ")
+                                    .replace(/k/g, ",000")
+                                    .replace(/L/, "00,000")
+                                : "Not specified"
+                            }</span>
                         </div>
                         <div class="detail-row">
                             <span class="label">Timeline:</span>
-                            <span class="value">${timeline ? timeline.charAt(0).toUpperCase() + timeline.slice(1) : 'Not specified'}</span>
+                            <span class="value">${
+                              timeline
+                                ? timeline.charAt(0).toUpperCase() +
+                                  timeline.slice(1)
+                                : "Not specified"
+                            }</span>
                         </div>
                     </div>
                     
                     <div class="section">
                         <div class="section-title">💬 Project Requirements</div>
                         <div class="message-box">
-                            ${message.replace(/\n/g, '<br>')}
+                            ${message.replace(/\n/g, "<br>")}
                         </div>
                     </div>
                     
-                    ${timeline === 'urgent' ? `
+                    ${
+                      timeline === "urgent"
+                        ? `
                     <div class="urgency-note">
                         <strong>🚨 URGENT REQUEST:</strong> Client has requested immediate attention. Please respond within 2 hours.
                     </div>
-                    ` : ''}
+                    `
+                        : ""
+                    }
                 </div>
                 
                 <div class="footer">
@@ -313,7 +341,7 @@ export const sendEmail = async (req, res) => {
     const clientMailOptions = {
       from: {
         name: "Ven Astro Digital Solution",
-        address: process.env.EMAIL_USER
+        address: process.env.EMAIL_USER,
       },
       to: email,
       subject: "Thank You for Contacting Ven Astro Digital Solution",
@@ -342,7 +370,9 @@ export const sendEmail = async (req, res) => {
                         <li>We'll contact you within 2 hours (for urgent requests) or 24 hours</li>
                         <li>We'll provide a detailed proposal and consultation</li>
                     </ul>
-                    <p><strong>Reference:</strong> ${service} - ${budget || 'Custom Quote'}</p>
+                    <p><strong>Reference:</strong> ${service} - ${
+        budget || "Custom Quote"
+      }</p>
                 </div>
                 <div class="footer">
                     <p><strong>Ven Astro Digital Solution</strong><br>
@@ -351,47 +381,27 @@ export const sendEmail = async (req, res) => {
             </div>
         </body>
         </html>
-      `
+      `,
     };
 
     // Send both emails
     await Promise.all([
       transporter.sendMail(mailOptions),
-      transporter.sendMail(clientMailOptions)
+      transporter.sendMail(clientMailOptions),
     ]);
 
     res.status(200).json({
       status: "success",
-      message: "Thank you! Your inquiry has been submitted successfully. We'll contact you within 2-4 hours.",
+      message:
+        "Thank you! Your inquiry has been submitted successfully. We'll contact you within 2-4 hours.",
       data: {
         inquiryId: emailRecord._id,
         service: service,
-        expectedResponse: timeline === 'urgent' ? 'Within 2 hours' : 'Within 24 hours'
-      }
+        expectedResponse:
+          timeline === "urgent" ? "Within 2 hours" : "Within 24 hours",
+      },
     });
-
   } catch (error) {
-    console.error("Email Error:", error);
-    
-    // Specific error handling
-    if (error.code === 'EAUTH') {
-      return res.status(500).json({
-        status: "failed",
-        message: "Email configuration error. Please contact support."
-      });
-    }
-    
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({
-        status: "failed",
-        message: "Invalid data provided. Please check your inputs."
-      });
-    }
-
-    res.status(500).json({
-      status: "failed",
-      message: "We're experiencing technical difficulties. Please try again in a few minutes or contact us directly.",
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    next(error);
   }
 };
