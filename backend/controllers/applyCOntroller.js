@@ -129,6 +129,29 @@ export const getApplicationsByJob = async (req, res) => {
   }
 };
 
+export const getApplicationById = async (req, res) => {
+  try {
+    const application = await Apply.findById(req.params.id)
+      .populate("jobId")
+      .lean();
+
+    if (!application) {
+      return next(new AppError("Application not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Application retrieved successfully",
+      data: application,
+    });
+  } catch {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const deleteApplication = async (req, res) => {
   try {
     const application = await Apply.findByIdAndDelete(req.params.id);

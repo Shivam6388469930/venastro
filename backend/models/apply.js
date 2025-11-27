@@ -5,25 +5,30 @@ const ApplySchema = new mongoose.Schema(
     jobId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "JobPost",
-      required: true,
+      required: [true, "Job ID is required"],
+      index: true,
     },
     fullName: {
       type: String,
-      required: true,
+      required: [true, "Full name is required"],
       trim: true,
+      minlength: [2, "Name must be at least 2 characters long"],
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       trim: true,
+      lowercase: true,
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please provide a valid email"],
     },
     phone: {
       type: String,
-      required: true,
+      required: [true, "Phone number is required"],
+      trim: true,
     },
     resume: {
-      type: String, // store resume URL (Cloudinary, S3, etc.)
-      required: true,
+      type: String,
+      required: [true, "Resume URL is required"],
     },
     coverLetter: {
       type: String,
@@ -37,5 +42,10 @@ const ApplySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+ApplySchema.index({ jobId: 1, email: 1 }, { unique: true });
+
+// Index for queries
+ApplySchema.index({ status: 1, createdAt: -1 });
 
 export default mongoose.model("Apply", ApplySchema);
