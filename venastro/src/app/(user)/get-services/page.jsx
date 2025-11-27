@@ -473,6 +473,7 @@
 
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState, useRef } from 'react';
 
 export default function GetServicePage() {
@@ -490,6 +491,7 @@ export default function GetServicePage() {
     budget: '',
     timeline: ''
   });
+  const router=useRouter()
 
   const services = [
     {
@@ -640,11 +642,45 @@ export default function GetServicePage() {
   //   console.log("Form submitted:", formData);
   //   alert("Thank you for your inquiry! We will contact you within 2 hours.");
   // };
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   try {
+//     const res = await fetch(`http://localhost:8080/api/email/send`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(formData),
+//     });
+
+//     const data = await res.json();
+
+//     if (data.status === "success") {
+//       alert("Thank you! Your inquiry has been submitted successfully.");
+
+//       setFormData({
+//         name: "",
+//         email: "",
+//         phone: "",
+//         company: "",
+//         message: "",
+//         service: "",
+//         budget: "",
+//         timeline: "",
+//       });
+//     } else {
+//       alert(data.message || "Something went wrong.");
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     alert("Server error. Please try again later.");
+//   }
+// };
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const res = await fetch(`http://localhost:8080/api/email/send`, {
+    const res = await fetch("http://localhost:8080/api/v1/email/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -668,11 +704,12 @@ const handleSubmit = async (e) => {
     } else {
       alert(data.message || "Something went wrong.");
     }
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     alert("Server error. Please try again later.");
   }
 };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans pt-16">
@@ -736,9 +773,12 @@ const handleSubmit = async (e) => {
                 </div>
               )}
 
-              <button className={`w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r ${service.gradient} text-white`}>
-                {selectedService === service.id ? "Service Selected" : "Select Service"}
-              </button>
+             <button
+  className={`w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r ${service.gradient} text-white`}
+  onClick={() => router.push('/get-services#service-form')}
+>
+  {selectedService === service.id ? "Service Selected" : "Select Service"}
+</button>
             </div>
           ))}
         </div>
@@ -819,7 +859,7 @@ const handleSubmit = async (e) => {
         )}
 
         {/* Contact Form */}
-        <div ref={formRef} className="max-w-4xl mx-auto">
+        <div ref={formRef} className="max-w-4xl mx-auto" id='service-form'>
           <div className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-3xl p-8 md:p-12">
             <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent mb-4">
               Get Started Today
@@ -828,7 +868,7 @@ const handleSubmit = async (e) => {
               Fill out the form below and we'll get back to you within 2 hours.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" >
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>

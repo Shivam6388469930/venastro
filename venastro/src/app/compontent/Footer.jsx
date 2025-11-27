@@ -1,3 +1,14 @@
+import {
+  Mail,
+  Phone,
+  Globe,
+  Linkedin,
+  Twitter,
+  Instagram,
+  Facebook
+} from "lucide-react";
+
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -15,18 +26,19 @@ export default function Footer() {
     'Business Consultation'
   ];
 
-  const contactInfo = [
-    { icon: '📧', detail: 'venastro.co@gmail.com' },
-    { icon: '📱', detail: '+91 8009426038' },
-    { icon: '🌐', detail: 'www.venastro.in' },
-  ];
+ const contactInfo = [
+  { icon: <Mail className="w-6 h-6 text-white" />, detail: 'venastro.co@gmail.com' },
+  { icon: <Phone className="w-6 h-6 text-white" />, detail: '+91 8009426038' },
 
-  const socialLinks = [
-    { name: 'LinkedIn', icon: '💼', href: '#' },
-    { name: 'Twitter', icon: '🐦', href: '#' },
-    { name: 'Instagram', icon: '📷', href: '#' },
-    { name: 'Facebook', icon: '👥', href: '#' },
-  ];
+];
+
+const socialLinks = [
+  { name: 'LinkedIn', icon: <Linkedin className="w-6 h-6 text-white" />, href: '#' },
+  { name: 'Twitter', icon: <Twitter className="w-6 h-6 text-white" />, href: '#' },
+  { name: 'Instagram', icon: <Instagram className="w-6 h-6 text-white" />, href: '#' },
+  { name: 'Facebook', icon: <Facebook className="w-6 h-6 text-white" />, href: '#' },
+];
+
 
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-black border-t border-gray-800">

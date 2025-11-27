@@ -5,6 +5,7 @@ const emailSchema = new mongoose.Schema(
     name: String,
     email: String,
     phone: String,
+    company: String,
     message: String,
     budget: String,
     service: String,
