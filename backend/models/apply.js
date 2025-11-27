@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const ApplySchema = new mongoose.Schema(
   {
@@ -28,6 +28,11 @@ const ApplySchema = new mongoose.Schema(
     coverLetter: {
       type: String,
       default: "",
+    },
+    status: {
+      type: String,
+      enum: ["pending", "reviewing", "shortlisted", "rejected", "accepted"],
+      default: "pending",
     },
   },
   { timestamps: true }

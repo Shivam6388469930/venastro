@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const JobPostSchema = new mongoose.Schema(
   {
@@ -32,6 +32,11 @@ const JobPostSchema = new mongoose.Schema(
     salary: {
       type: String,
       default: "Not disclosed",
+    },
+    status: {
+      type: String,
+      enum: ["active", "closed", "draft"],
+      default: "active",
     },
   },
   { timestamps: true }

@@ -18,6 +18,21 @@ export const applyJob = async (req, res) => {
       });
     }
 
+    if (job.status !== "active") {
+      return res.status(400).json({
+        success: false,
+        message: "This job is no longer accepting applications",
+      });
+    }
+
+    const existingApplication = await Apply.findOne({ jobId, email });
+    if (existingApplication) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already applied for this job",
+      });
+    }
+
     // Save application
     const application = await Apply.create({
       jobId,
@@ -27,6 +42,8 @@ export const applyJob = async (req, res) => {
       resume,
       coverLetter,
     });
+
+    await application.populate("jobId", "title companyName location");
 
     res.status(201).json({
       success: true,
@@ -47,12 +64,35 @@ export const applyJob = async (req, res) => {
 
 export const getAllApplications = async (req, res) => {
   try {
-    const apps = await Apply.find().populate("jobId");
+    const { status, page = 1, limit = 10 } = req.query;
+
+    // Build query
+    const query = {};
+    if (status) query.status = status;
+
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const [applications, total] = await Promise.all([
+      Apply.find(query)
+        .populate("jobId", "title companyName location status")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+        .lean(),
+      Apply.countDocuments(query),
+    ]);
 
     res.status(200).json({
       success: true,
-      count: apps.length,
-      data: apps,
+      message: "Applications retrieved successfully",
+      data: applications,
+      pagination: {
+        total,
+        page: parseInt(page),
+        pages: Math.ceil(total / parseInt(limit)),
+        limit: parseInt(limit),
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -68,14 +108,42 @@ export const getAllApplications = async (req, res) => {
 
 export const getApplicationsByJob = async (req, res) => {
   try {
-    const { jobId } = req.params;
+    const application = await Apply.findById(req.params.id)
+      .populate("jobId")
+      .lean();
 
-    const apps = await Apply.find({ jobId }).populate("jobId");
+    if (!application) {
+      return next(new AppError("Application not found", 404));
+    }
 
     res.status(200).json({
       success: true,
-      count: apps.length,
-      data: apps,
+      message: "Application retrieved successfully",
+      data: application,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deleteApplication = async (req, res) => {
+  try {
+    const application = await Apply.findByIdAndDelete(req.params.id);
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Application deleted successfully",
+      data: { id: req.params.id },
     });
   } catch (error) {
     res.status(500).json({
