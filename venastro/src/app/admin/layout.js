@@ -29,8 +29,8 @@ export default function AdminLayout({ children }) {
 
   const menuItems = [
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: `/admin?key=${ADMIN_KEY}` },
-    { name: "Service Leads", icon: <List size={20} />, path: `/admin/services-lead?key=${ADMIN_KEY}` },
-    { name: "Contact Leads", icon: <Mail size={20} />, path: `/admin/contact-lead?key=${ADMIN_KEY}` },
+    { name: " Leads Information", icon: <List size={20} />, path: `/admin/services-lead?key=${ADMIN_KEY}` },
+
     { name: "Jobs", icon: <Briefcase size={20} />, path: `/admin/job?key=${ADMIN_KEY}` },
     { name: "Job Applications", icon: <FileText size={20} />, path: `/admin/application?key=${ADMIN_KEY}` },
   ];

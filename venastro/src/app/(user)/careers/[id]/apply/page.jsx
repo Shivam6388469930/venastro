@@ -1,29 +1,58 @@
 'use client';
 
-import { use } from "react";
-import { useState } from "react";
-import { mockJobs } from "../../../../data/mockJobs.js";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
-export default function ApplyForm({ params }) {
-  const { id } = use(params);
+const JOB_API_URL = "http://localhost:8080/api/v1/jobs";
+const APPLY_API_URL = "http://localhost:8080/api/v1/apply";
 
-  const job = mockJobs.find((j) => j.id === id);
+export default function ApplyForm() {
+  const pathname = usePathname();
+  const segments = pathname.split("/");
+  const id = segments[segments.length - 2]; // job ID
+
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     fullName: "",
     email: "",
     phone: "",
     experience: "",
-    message: "",
+    coverLetter: "",
     resume: null,
   });
 
+  // Fetch job details
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchJob = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${JOB_API_URL}/${id}`);
+        const data = await res.json();
+
+        if (data.success && data.data) setJob(data.data);
+        else setError("Job not found");
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("Failed to load job details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJob();
+  }, [id]);
+
   const handleResumeUpload = (e) => {
-    const file = e.target.files[0];
-    setForm({ ...form, resume: file });
+    setForm({ ...form, resume: e.target.files[0] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.resume) {
@@ -31,22 +60,53 @@ export default function ApplyForm({ params }) {
       return;
     }
 
-    alert("Your application has been submitted!");
+    try {
+      setSubmitting(true);
 
-    setForm({
-      fullName: "",
-      email: "",
-      phone: "",
-      experience: "",
-      message: "",
-      resume: null,
-    });
+      // FormData to send file and other fields
+      const formData = new FormData();
+      formData.append("jobId", id);
+      formData.append("fullName", form.fullName);
+      formData.append("email", form.email);
+      formData.append("phone", form.phone);
+      formData.append("coverLetter", form.coverLetter || "");
+      formData.append("resume", form.resume);
 
-    document.getElementById("resumeInput").value = "";
+      const res = await fetch(APPLY_API_URL, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Application submitted successfully!");
+        setForm({
+          fullName: "",
+          email: "",
+          phone: "",
+          experience: "",
+          coverLetter: "",
+          resume: null,
+        });
+        document.getElementById("resumeInput").value = "";
+      } else {
+        alert(data.message || "Failed to submit application");
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      alert("Failed to submit application. Try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
+  if (loading) return <p className="text-white p-10">Loading...</p>;
+  if (error) return <p className="text-red-300 p-10">{error}</p>;
+  if (!job) return <p className="text-white p-10">Job not found</p>;
+
   return (
-    <div className="min-h-screen bg-black text-white px-4 py-10">
+    <div className="min-h-screen bg-black text-white px-4 py-10 mt-20">
       <div className="max-w-3xl mx-auto bg-gray-900 border border-gray-700 p-8 rounded-xl">
 
         <h1 className="text-3xl font-bold mb-6">Apply for {job.title}</h1>
@@ -80,22 +140,12 @@ export default function ApplyForm({ params }) {
             required
           />
 
-          <input
-            type="number"
-            placeholder="Experience (years)"
-            className="p-3 rounded-lg bg-gray-800 border border-gray-700"
-            value={form.experience}
-            onChange={(e) => setForm({ ...form, experience: e.target.value })}
-            required
-          />
-
           <textarea
-            placeholder="Why should we hire you?"
+            placeholder="Cover Letter / Why should we hire you?"
             rows={4}
             className="p-3 rounded-lg bg-gray-800 border border-gray-700"
-            value={form.message}
-            onChange={(e) => setForm({ ...form, message: e.target.value })}
-            required
+            value={form.coverLetter}
+            onChange={(e) => setForm({ ...form, coverLetter: e.target.value })}
           />
 
           {/* Resume Upload */}
@@ -120,8 +170,12 @@ export default function ApplyForm({ params }) {
             )}
           </div>
 
-          <button className="bg-blue-600 py-3 rounded-lg hover:bg-blue-700">
-            Submit Application
+          <button
+            type="submit"
+            disabled={submitting}
+            className="bg-blue-600 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          >
+            {submitting ? "Submitting..." : "Submit Application"}
           </button>
 
         </form>

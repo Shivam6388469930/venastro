@@ -9,11 +9,12 @@ export default function AdminServiceLeads() {
 
   const loadLeads = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/v1/services-leads/all");
+      const res = await fetch("http://localhost:8080/api/v1/email/getAll");
       const data = await res.json();
 
-      if (data.success !== false) {
-        setLeads(data.data || []);
+      // FIX: your API returns { status, count, emails: [...] }
+      if (data.status === "success") {
+        setLeads(data.emails || []);
       }
     } catch (err) {
       console.log(err);
@@ -52,7 +53,6 @@ export default function AdminServiceLeads() {
 
       <h1 className="text-3xl font-bold mb-6">Service Leads</h1>
 
-      {/* Search */}
       <input
         type="text"
         placeholder="Search by name, service..."
@@ -61,7 +61,6 @@ export default function AdminServiceLeads() {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* Table */}
       {loading ? (
         <p className="text-gray-400">Loading...</p>
       ) : filtered.length === 0 ? (
