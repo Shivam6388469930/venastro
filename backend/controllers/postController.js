@@ -1,5 +1,6 @@
-import JobPost from "../models/jobModel.js"; // Updated import name
-import { AppError } from "../middleware/errorMiddleware.js"; // Added missing import
+import JobPost from "../models/job.js"; // Updated import name
+import { AppError } from "../middleware/errorHandler.js"; // Added missing import
+import mongoose from "mongoose";
 
 // CREATE JOB POST
 export const createJob = async (req, res, next) => {
@@ -58,9 +59,15 @@ export const getJobs = async (req, res, next) => {
 
 // GET SINGLE JOB POST (Includes applicationCount via Virtual)
 export const getJobById = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    return next(new AppError("Invalid Job ID", 400));
+  }
+
   try {
-    const job = await JobPost.findById(req.params.id)
-      .populate("applicationCount") // Now works thanks to the Virtual in the model
+    const job = await JobPost.findById(id)
+      .populate("applicationCount")
       .lean();
 
     if (!job) {
@@ -76,7 +83,6 @@ export const getJobById = async (req, res, next) => {
     next(error);
   }
 };
-
 // UPDATE JOB POST
 export const updateJob = async (req, res, next) => {
   try {

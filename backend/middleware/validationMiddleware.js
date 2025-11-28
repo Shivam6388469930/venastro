@@ -1,4 +1,4 @@
-import { AppError } from "./errorMiddleware.js"; // Fixed path consistency
+import { AppError } from "./errorHandler.js";// Fixed path consistency
 
 // Helper validation functions (placed here for cleaner export list)
 const isValidEmail = (email) => {

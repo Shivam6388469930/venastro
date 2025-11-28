@@ -1,6 +1,6 @@
-import Apply from "../models/applyModel.js";
-import JobPost from "../models/jobModel.js"; // Updated import name
-import { AppError } from "../middleware/errorMiddleware.js"; // Added missing import
+import Apply from "../models/apply.js";
+import JobPost from "../models/job.js"; // Updated import name
+import { AppError } from "../middleware/errorHandler.js"; // Added missing import
 
 // ======================
 // APPLY FOR JOB

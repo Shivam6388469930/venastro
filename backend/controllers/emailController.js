@@ -2,7 +2,7 @@
 // const Email = require("../models/mails");
 import transporter from "../configs/mail.js";
 import Email from "../models/mails.js";
-import { AppError } from "../middleware/errorMiddleware.js";
+import { validateApplication } from "../middleware/validationMiddleware.js";
 
 export const sendEmail = async (req, res) => {
   try {
@@ -400,6 +400,20 @@ export const sendEmail = async (req, res) => {
         expectedResponse:
           timeline === "urgent" ? "Within 2 hours" : "Within 24 hours",
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllEmails = async (req, res, next) => {
+  try {
+    const emails = await Email.find().sort({ createdAt: -1 }); // Latest first
+
+    res.status(200).json({
+      status: "success",
+      count: emails.length,
+      emails,
     });
   } catch (error) {
     next(error);
