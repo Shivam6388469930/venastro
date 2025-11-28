@@ -27,6 +27,10 @@ app.use(express.json());
 
 app.use(morgan("dev"));
 
+app.get("/", (req, res) => {
+  res.status(200).send("Backend API is running! 🚀");
+});
+
 // Routes
 app.use("/api/v1/email",emailRoute);
 app.use('/api/v1/jobs', jobRouter);
