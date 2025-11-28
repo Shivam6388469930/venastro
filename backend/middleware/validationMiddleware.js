@@ -107,8 +107,40 @@ export const validateJob = (req, res, next) => {
 };
 
 // Application validation
+// export const validateApplication = (req, res, next) => {
+//   const { jobId, fullName, email, phone, resume } = req.body;
+
+//   const errors = [];
+
+//   if (!jobId || !isValidObjectId(jobId)) {
+//     errors.push("Valid job ID is required");
+//   }
+
+//   if (!fullName || fullName.trim().length < 2) {
+//     errors.push("Full name must be at least 2 characters long");
+//   }
+
+//   if (!email || !isValidEmail(email)) {
+//     errors.push("Valid email is required");
+//   }
+
+//   if (!phone || !isValidPhone(phone)) {
+//     errors.push("Valid phone number is required");
+//   }
+
+//   if (!resume || !isValidUrl(resume)) {
+//     errors.push("Valid resume URL is required (must be a full URL)");
+//   }
+
+//   if (errors.length > 0) {
+//     return next(new AppError(errors.join(", "), 400));
+//   }
+
+//   next();
+// };
 export const validateApplication = (req, res, next) => {
   const { jobId, fullName, email, phone, resume } = req.body;
+  const files = req.files; // Multer puts files here when using upload.fields
 
   const errors = [];
 
@@ -128,7 +160,10 @@ export const validateApplication = (req, res, next) => {
     errors.push("Valid phone number is required");
   }
 
-  if (!resume || !isValidUrl(resume)) {
+  // Check either resume URL is valid OR resume file is uploaded
+  if ((!resume || resume.trim() === "") && (!files || !files.resume)) {
+    errors.push("Resume URL or file upload is required");
+  } else if (resume && !isValidUrl(resume)) {
     errors.push("Valid resume URL is required (must be a full URL)");
   }
 
