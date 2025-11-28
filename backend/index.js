@@ -10,8 +10,7 @@ import applyRouter from "./route/applyRoutes.js";
 import "dotenv/config"; // Loads environment variables directly
 import emailRoute from "./route/email.js";
 
-
-const PORT=8080;
+const PORT = 8080;
 const app = express();
 
 // Middleware
@@ -32,9 +31,11 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/api/v1/email",emailRoute);
-app.use('/api/v1/jobs', jobRouter);
-app.use('/api/v1/apply', applyRouter);
+app.use("/api/v1/email", emailRoute);
+app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/apply", applyRouter);
+
+app.use(errorHandler);
 
 // 🔥 CONNECT TO DATABASE
 mongoose
