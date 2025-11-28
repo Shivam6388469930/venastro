@@ -27,12 +27,12 @@ const ApplySchema = new mongoose.Schema(
       trim: true,
     },
     resume: {
-      type: String,
-      required: [true, "Resume URL is required"],
+      url: { type: String, required: true },
+      public_id: { type: String, required: true },
     },
     coverLetter: {
-      type: String,
-      default: "",
+      url: { type: String, default: "" },
+      public_id: { type: String, default: "" },
     },
     status: {
       type: String,
