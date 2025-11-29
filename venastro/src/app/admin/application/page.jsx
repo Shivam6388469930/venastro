@@ -10,7 +10,7 @@
 
 //   const loadApplications = async () => {
 //     try {
-//       const res = await fetch("http://localhost:8080/api/applications");
+//       const res = await fetch("https://api.venastro.in/api/applications");
 //       const data = await res.json();
 
 //       if (data.success) {
@@ -30,7 +30,7 @@
 //     if (!confirm("Delete this application?")) return;
 
 //     try {
-//       const res = await fetch(`http://localhost:8080/api/applications/${id}`, {
+//       const res = await fetch(`https://api.venastro.in/api/applications/${id}`, {
 //         method: "DELETE",
 //       });
 
@@ -168,7 +168,7 @@ export default function AdminApplicationsPage() {
   const loadApplications = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8080/api/v1/apply");
+      const res = await fetch("https://api.venastro.in/api/v1/apply");
       const data = await res.json();
 
       if (data.success) {
@@ -194,7 +194,7 @@ export default function AdminApplicationsPage() {
     if (!confirm("Delete this application?")) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/applications/${id}`, {
+      const res = await fetch(`https://api.venastro.in/api/v1/applications/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();

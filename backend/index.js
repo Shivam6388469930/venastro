@@ -9,6 +9,7 @@ import applyRouter from "./route/applyRoutes.js";
 
 import "dotenv/config"; // Loads environment variables directly
 import emailRoute from "./route/email.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 const PORT = 8080;
 const app = express();

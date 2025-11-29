@@ -197,7 +197,7 @@ function JobModal({ title, formData, setFormData, handleSubmit, close, loading =
 //   const loadJobs = async () => {
 //     try {
 //       setLoading(true);
-//       const res = await fetch("http://localhost:8080/api/v1/jobs");
+//       const res = await fetch("https://api.venastro.in/api/v1/jobs");
 //       const data = await res.json();
 
 //       if (data.success) {
@@ -229,7 +229,7 @@ function JobModal({ title, formData, setFormData, handleSubmit, close, loading =
 //     };
 
 //     try {
-//       const res = await fetch("http://localhost:8080/api/v1/jobs", {
+//       const res = await fetch("https://api.venastro.in/api/v1/jobs", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify(payload),
@@ -301,7 +301,7 @@ function JobModal({ title, formData, setFormData, handleSubmit, close, loading =
 //     };
 
 //     try {
-//       const res = await fetch(`http://localhost:8080/api/jobs/${selectedJob._id}`, {
+//       const res = await fetch(`https://api.venastro.in/api/jobs/${selectedJob._id}`, {
 //         method: "PUT",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify(payload),
@@ -329,7 +329,7 @@ function JobModal({ title, formData, setFormData, handleSubmit, close, loading =
 //     if (!confirm("Are you sure you want to delete this job? This action cannot be undone.")) return;
 
 //     try {
-//       const res = await fetch(`http://localhost:8080/api/jobs/${id}`, {
+//       const res = await fetch(`https://api.venastro.in/api/jobs/${id}`, {
 //         method: "DELETE",
 //       });
 
@@ -537,7 +537,7 @@ function JobModal({ title, formData, setFormData, handleSubmit, close, loading =
 
 
 // API Base URL - Change only if deploying
-const API_BASE = "http://localhost:8080/api/v1/jobs";
+const API_BASE = "https://api.venastro.in/api/v1/jobs";
 
 export default function JobsAdminPage() {
   const [jobs, setJobs] = useState([]);

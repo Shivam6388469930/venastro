@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const API_URL = "http://localhost:8080/api/v1/jobs";
+const API_URL = "https://api.venastro.in/api/v1/jobs";
 
 export default function JobDetails() {
   const pathname = usePathname(); // e.g. /careers/6928923b7cefb7a43eaec20d

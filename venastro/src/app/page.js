@@ -45,7 +45,7 @@
 //               e.preventDefault();
 
 //               try {
-//                 const res = await fetch("http://localhost:8080/api/v1/email/send", {
+//                 const res = await fetch("https://api.venastro.in/api/v1/email/send", {
 //                   method: "POST",
 //                   headers: { "Content-Type": "application/json" },
 //                   body: JSON.stringify(formData),
@@ -300,6 +300,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Users, Laptop, TrendingUp, Mail, Phone, Globe } from "lucide-react";
+import Navbar from "./compontent/Navbar";
+import Footer from "./compontent/Footer";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -346,7 +348,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white font-sans">
-
+ <Navbar/> 
       {/* ------------------------------------------------ */}
       {/* MODAL (Moved inside return, UI unchanged) */}
       {/* ------------------------------------------------ */}
@@ -372,7 +374,7 @@ export default function Home() {
               onSubmit={async (e) => {
                 e.preventDefault();
                 try {
-                  const res = await fetch("http://localhost:8080/api/v1/email/send", {
+                  const res = await fetch("https://api.venastro.in/api/v1/email/send", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formData),
@@ -628,7 +630,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+  <Footer/>
     </div>
   );
 }

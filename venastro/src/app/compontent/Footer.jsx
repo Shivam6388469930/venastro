@@ -63,7 +63,7 @@ const socialLinks = [
               Empowering businesses through innovative digital solutions and reliable manpower services. 
               Your trusted partner for growth and digital transformation.
             </p>
-            <div className="flex space-x-4">
+            {/* <div className="flex space-x-4">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
@@ -76,7 +76,7 @@ const socialLinks = [
                   </span>
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Links */}

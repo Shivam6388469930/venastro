@@ -9,7 +9,7 @@ export default function AdminServiceLeads() {
 
   const loadLeads = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/v1/email/getAll");
+      const res = await fetch("https://api.venastro.in/api/v1/email/getAll");
       const data = await res.json();
 
       // FIX: your API returns { status, count, emails: [...] }
@@ -31,7 +31,7 @@ export default function AdminServiceLeads() {
     if (!confirm("Are you sure?")) return;
 
     try {
-      await fetch(`http://localhost:8080/api/v1/services-leads/${id}`, {
+      await fetch(`https://api.venastro.in/api/v1/services-leads/${id}`, {
         method: "DELETE",
       });
 

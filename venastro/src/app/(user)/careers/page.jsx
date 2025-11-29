@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const API_URL = "http://localhost:8080/api/v1/jobs";
+const API_URL = "https://api.venastro.in/api/v1/jobs";
 
 export default function CareersPage() {
   const [jobs, setJobs] = useState([]);

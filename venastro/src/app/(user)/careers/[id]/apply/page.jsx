@@ -3,8 +3,8 @@
 // import { useState, useEffect } from "react";
 // import { usePathname } from "next/navigation";
 
-// const JOB_API_URL = "http://localhost:8080/api/v1/jobs";
-// const APPLY_API_URL = "http://localhost:8080/api/v1/apply";
+// const JOB_API_URL = "https://api.venastro.in/api/v1/jobs";
+// const APPLY_API_URL = "https://api.venastro.in/api/v1/apply";
 
 // export default function ApplyForm() {
 //   const pathname = usePathname();
@@ -190,8 +190,8 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const JOB_API_URL = "http://localhost:8080/api/v1/jobs";
-const APPLY_API_URL = "http://localhost:8080/api/v1/apply";
+const JOB_API_URL = "https://api.venastro.in/api/v1/jobs";
+const APPLY_API_URL = "https://api.venastro.in/api/v1/apply";
 
 export default function ApplyForm() {
   const pathname = usePathname();

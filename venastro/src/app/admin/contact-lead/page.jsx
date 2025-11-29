@@ -9,7 +9,7 @@ export default function AdminContactLeads() {
 
   const loadLeads = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/v1/email/all");
+      const res = await fetch("https://api.venastro.in/api/v1/email/all");
       const data = await res.json();
 
       if (data.success !== false) {
@@ -30,7 +30,7 @@ export default function AdminContactLeads() {
     if (!confirm("Are you sure?")) return;
 
     try {
-      await fetch(`http://localhost:8080/api/v1/email/${id}`, {
+      await fetch(`https://api.venastro.in/api/v1/email/${id}`, {
         method: "DELETE",
       });
 

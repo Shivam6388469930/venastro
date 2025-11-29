@@ -289,7 +289,7 @@ export default function ContactPage() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8080/api/v1/email/send", {
+      const res = await fetch("https://api.venastro.in/api/v1/email/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
