@@ -14,13 +14,20 @@ import errorHandler from "./middleware/errorHandler.js";
 const PORT = 8080;
 const app = express();
 
-// Middleware
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: [
+      "https://venastro.in",        // your main domain
+      "https://www.venastro.in",    // www version
+      "http://localhost:3000"       // local development
+    ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true, limit: '10mb' }));

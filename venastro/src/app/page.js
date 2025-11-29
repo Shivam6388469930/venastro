@@ -347,8 +347,10 @@ export default function Home() {
   ];
 
   return (
+    <>
+     <Navbar/> 
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white font-sans">
- <Navbar/> 
+
       {/* ------------------------------------------------ */}
       {/* MODAL (Moved inside return, UI unchanged) */}
       {/* ------------------------------------------------ */}
@@ -630,7 +632,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-  <Footer/>
+ 
     </div>
+     <Footer/>
+    </>
   );
 }
